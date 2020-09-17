@@ -1,0 +1,2 @@
+JOB1_FILENAME=job1.txt
+JOB2_FILENAME=job2.txt
