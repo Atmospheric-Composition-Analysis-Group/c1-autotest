@@ -1,0 +1,19 @@
+#!/bin/bash
+
+root_dir=$(dirname $(realpath $(dirname "$0")))
+
+export RUN_DIRECTORY=$(pwd)
+
+# The remaining arguments are variables to source
+variables=
+for envfile in "$@"; do
+   source $envfile
+   variables+="$(cut -d= -f1 $envfile) "
+   export $variables
+done
+
+# List of restricted variables to substitute
+envsubst_list="$(printf '${%s} ' $variables)"
+envsubst_list+='${RUN_DIRECTORY}'
+
+cat $root_dir/templates/gchp_bsub_header.sh $root_dir/templates/do_compile.sh $root_dir/templates/do_run.sh | envsubst "$envsubst_list" # | bsub
